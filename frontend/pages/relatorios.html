@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relatórios - Controle Financeiro</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    
+    <!-- Estilos personalizados -->
+    <link href="../css/style.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="dashboard.html">
+                <i class="bi bi-currency-dollar me-2"></i>
+                Controle Financeiro
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="dashboard.html">
+                            <i class="bi bi-speedometer2 me-1"></i>
+                            Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="transacoes.html">
+                            <i class="bi bi-list-ul me-1"></i>
+                            Transações
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="categorias.html">
+                            <i class="bi bi-tags me-1"></i>
+                            Categorias
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="relatorios.html">
+                            <i class="bi bi-bar-chart me-1"></i>
+                            Relatórios
+                        </a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-person-circle me-1"></i>
+                            <span id="user-name">Carregando...</span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#" id="logout-btn">
+                                <i class="bi bi-box-arrow-right me-2"></i>
+                                Sair
+                            </a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container mt-5-custom">
+        <div class="row mb-4">
+            <div class="col-12">
+                <h1 class="h2 mb-3">Relatórios Financeiros</h1>
+                <p class="text-muted">Análise detalhada das suas finanças</p>
+            </div>
+        </div>
+
+        <!-- Filtros -->
+        <div class="row mb-4">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-3 mb-3">
+                                <label class="form-label">Data Início</label>
+                                <input type="date" class="form-control" id="relatorio-data-inicio">
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label class="form-label">Data Fim</label>
+                                <input type="date" class="form-control" id="relatorio-data-fim">
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label class="form-label">Tipo</label>
+                                <select class="form-select" id="relatorio-tipo">
+                                    <option value="">Todos</option>
+                                    <option value="income">Receitas</option>
+                                    <option value="expense">Despesas</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label class="form-label">Ação</label>
+                                <div class="d-grid gap-2">
+                                    <button class="btn btn-primary" id="btn-gerar-relatorio">
+                                        <i class="bi bi-search me-2"></i>
+                                        Gerar Relatório
+                                    </button>
+                                    <button class="btn btn-success" id="btn-exportar-excel">
+                                        <i class="bi bi-file-earmark-excel me-2"></i>
+                                        Exportar para Excel
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Resumo Financeiro -->
+        <div class="row mb-4">
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <i class="bi bi-arrow-up-circle text-success icon-large"></i>
+                        <h5 class="text-success" id="relatorio-receitas">R$ 0,00</h5>
+                        <small class="text-muted">Total de Receitas</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <i class="bi bi-arrow-down-circle text-danger icon-large"></i>
+                        <h5 class="text-danger" id="relatorio-despesas">R$ 0,00</h5>
+                        <small class="text-muted">Total de Despesas</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <i class="bi bi-wallet2 icon-large"></i>
+                        <h5 class="saldo-zero" id="relatorio-saldo">R$ 0,00</h5>
+                        <small class="text-muted">Saldo</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Gráficos -->
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <i class="bi bi-pie-chart me-2"></i>
+                        Distribuição por Categoria
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-container">
+                            <canvas id="relatorioCategoriaChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <i class="bi bi-bar-chart me-2"></i>
+                        Receitas vs Despesas
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-container">
+                            <canvas id="relatorioComparativoChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tabela de Detalhes -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <i class="bi bi-table me-2"></i>
+                        Detalhes por Categoria
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover" id="tabela-relatorio">
+                                <thead>
+                                    <tr>
+                                        <th>Categoria</th>
+                                        <th>Tipo</th>
+                                        <th>Total</th>
+                                        <th>Transações</th>
+                                        <th>Média</th>
+                                        <th>% do Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Dados carregados via JavaScript -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer mt-5-custom">
+        <div class="container text-center">
+            <p class="mb-0">© 2024 Controle Financeiro - Todos os direitos reservados</p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- SheetJS (xlsx.js) para exportação Excel -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    
+    <!-- JavaScript personalizado -->
+    <script src="../js/app.js"></script>
+    
+    <script>
+        let user_id = null;
+        let transacoes = [];
+        let categorias = [];
+
+        // Função para calcular e atualizar resumo
+        function updateResumoRelatorio(transacoesFiltradas) {
+            const totalReceitas = transacoesFiltradas
+                .filter(t => t.tipo === 'income')
+                .reduce((sum, t) => sum + parseFloat(t.valor), 0);
+            
+            const totalDespesas = transacoesFiltradas
+                .filter(t => t.tipo === 'expense')
+                .reduce((sum, t) => sum + parseFloat(t.valor), 0);
+            
+            const saldo = totalReceitas - totalDespesas;
+            
+            document.getElementById('relatorio-receitas').textContent = formatCurrency(totalReceitas);
+            document.getElementById('relatorio-despesas').textContent = formatCurrency(totalDespesas);
+            
+            const saldoElement = document.getElementById('relatorio-saldo');
+            saldoElement.textContent = formatCurrency(saldo);
+            saldoElement.className = saldo > 0 ? 'text-success' : saldo < 0 ? 'text-danger' : 'text-muted';
+        }
+
+        // Função para gerar gráfico de distribuição por categoria
+        function generateCategoriaChart(transacoesFiltradas) {
+            const ctx = document.getElementById('relatorioCategoriaChart');
+            if (!ctx) return;
+
+            // Agrupar por categoria
+            const categoriasAgrupadas = {};
+            transacoesFiltradas.forEach(t => {
+                if (!categoriasAgrupadas[t.categoria_id]) {
+                    categoriasAgrupadas[t.categoria_id] = {
+                        nome: t.categoria_nome,
+                        tipo: t.categoria_tipo,
+                        total: 0
+                    };
+                }
+                categoriasAgrupadas[t.categoria_id].total += parseFloat(t.valor);
+            });
+
+            const labels = Object.values(categoriasAgrupadas).map(c => c.nome);
+            const values = Object.values(categoriasAgrupadas).map(c => Math.abs(c.total));
+            const colors = Object.values(categoriasAgrupadas).map(c => c.tipo === 'income' ? '#28a745' : '#dc3545');
+
+            // Destruir gráfico existente se houver
+            if (window.relatorioCategoriaChart) {
+                try {
+                    window.relatorioCategoriaChart.destroy();
+                } catch (e) {
+                    // Se o método destroy não existir, tentar alternativas
+                    if (window.relatorioCategoriaChart.canvas) {
+                        window.relatorioCategoriaChart.canvas.parentNode.removeChild(window.relatorioCategoriaChart.canvas);
+                    }
+                    window.relatorioCategoriaChart = null;
+                }
+            }
+
+            window.relatorioCategoriaChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: values,
+                        backgroundColor: colors,
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+        }
+
+        // Função para gerar gráfico comparativo
+        function generateComparativoChart(transacoesFiltradas) {
+            const ctx = document.getElementById('relatorioComparativoChart');
+            if (!ctx) return;
+
+            // Agrupar por tipo e data
+            const dadosPorData = {};
+            transacoesFiltradas.forEach(t => {
+                const data = t.data;
+                if (!dadosPorData[data]) {
+                    dadosPorData[data] = { income: 0, expense: 0 };
+                }
+                if (t.tipo === 'income') {
+                    dadosPorData[data].income += parseFloat(t.valor);
+                } else {
+                    dadosPorData[data].expense += parseFloat(t.valor);
+                }
+            });
+
+            const datas = Object.keys(dadosPorData).sort();
+            const receitas = datas.map(d => dadosPorData[d].income);
+            const despesas = datas.map(d => dadosPorData[d].expense);
+
+            // Destruir gráfico existente se houver
+            if (window.relatorioComparativoChart) {
+                try {
+                    window.relatorioComparativoChart.destroy();
+                } catch (e) {
+                    // Se o método destroy não existir, tentar alternativas
+                    if (window.relatorioComparativoChart.canvas) {
+                        window.relatorioComparativoChart.canvas.parentNode.removeChild(window.relatorioComparativoChart.canvas);
+                    }
+                    window.relatorioComparativoChart = null;
+                }
+            }
+
+            window.relatorioComparativoChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: datas,
+                    datasets: [
+                        {
+                            label: 'Receitas',
+                            data: receitas,
+                            backgroundColor: '#28a745',
+                            borderWidth: 1
+                        },
+                        {
+                            label: 'Despesas',
+                            data: despesas,
+                            backgroundColor: '#dc3545',
+                            borderWidth: 1
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'top'
+                        }
+                    }
+                }
+            });
+        }
+
+        // Função para gerar tabela de detalhes
+        function generateTabelaDetalhes(transacoesFiltradas) {
+            const tbody = document.getElementById('tabela-relatorio').querySelector('tbody');
+            tbody.innerHTML = '';
+
+            if (transacoesFiltradas.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" class="text-center text-muted">Nenhuma transação encontrada</td></tr>';
+                return;
+            }
+
+            // Agrupar por categoria
+            const categoriasAgrupadas = {};
+            transacoesFiltradas.forEach(t => {
+                if (!categoriasAgrupadas[t.categoria_id]) {
+                    categoriasAgrupadas[t.categoria_id] = {
+                        id: t.categoria_id,
+                        nome: t.categoria_nome,
+                        tipo: t.categoria_tipo,
+                        total: 0,
+                        transacoes: 0,
+                        media: 0
+                    };
+                }
+                categoriasAgrupadas[t.categoria_id].total += parseFloat(t.valor);
+                categoriasAgrupadas[t.categoria_id].transacoes++;
+            });
+
+            // Calcular totais
+            const totalGeral = transacoesFiltradas.reduce((sum, t) => sum + parseFloat(t.valor), 0);
+
+            // Ordenar por total
+            const categoriasOrdenadas = Object.values(categoriasAgrupadas).sort((a, b) => b.total - a.total);
+
+            categoriasOrdenadas.forEach(c => {
+                c.media = c.total / c.transacoes;
+                const porcentagem = totalGeral !== 0 ? (Math.abs(c.total) / Math.abs(totalGeral)) * 100 : 0;
+
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${c.nome}</td>
+                    <td><span class="badge ${c.tipo === 'income' ? 'badge-income' : 'badge-expense'}">${c.tipo === 'income' ? 'Receita' : 'Despesa'}</span></td>
+                    <td class="${c.tipo === 'income' ? 'text-income' : 'text-expense'}">${formatCurrency(c.total)}</td>
+                    <td>${c.transacoes}</td>
+                    <td>${formatCurrency(c.media)}</td>
+                    <td>${porcentagem.toFixed(2)}%</td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        // Função para aplicar filtros e gerar relatório
+        async function gerarRelatorio() {
+            const dataInicio = document.getElementById('relatorio-data-inicio').value;
+            const dataFim = document.getElementById('relatorio-data-fim').value;
+            const tipo = document.getElementById('relatorio-tipo').value;
+
+            let transacoesFiltradas = [...transacoes];
+
+            if (dataInicio) {
+                transacoesFiltradas = transacoesFiltradas.filter(t => t.data >= dataInicio);
+            }
+
+            if (dataFim) {
+                transacoesFiltradas = transacoesFiltradas.filter(t => t.data <= dataFim);
+            }
+
+            if (tipo) {
+                transacoesFiltradas = transacoesFiltradas.filter(t => t.tipo === tipo);
+            }
+
+            updateResumoRelatorio(transacoesFiltradas);
+            generateCategoriaChart(transacoesFiltradas);
+            generateComparativoChart(transacoesFiltradas);
+            generateTabelaDetalhes(transacoesFiltradas);
+        }
+
+        // Função para inicializar a página
+        async function initRelatorios() {
+            const user = getUser();
+            if (!user) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            user_id = user.id;
+
+            // Atualizar nome do usuário no navbar
+            const userNameElement = document.getElementById('user-name');
+            if (userNameElement) {
+                userNameElement.textContent = user.nome;
+            }
+
+            // Carregar transações
+            transacoes = await getTransacoes(user_id, 1000, 0);
+
+            // Gerar relatório inicial
+            await gerarRelatorio();
+        }
+
+        // Função para exportar para Excel
+        function exportarParaExcel() {
+            try {
+                // Obter transações filtradas atuais
+                const transacoesFiltradas = obterTransacoesFiltradas();
+                
+                if (transacoesFiltradas.length === 0) {
+                    mostrarFeedback('Nenhuma transação encontrada para exportar.', 'warning');
+                    return;
+                }
+
+                // Gerar dados para as abas
+                const dadosCategorias = gerarDadosCategorias(transacoesFiltradas);
+                const dadosTransacoes = gerarDadosTransacoes(transacoesFiltradas);
+                
+                // Criar workbook com múltiplas abas
+                const wb = XLSX.utils.book_new();
+                
+                // Adicionar aba de categorias
+                const wsCategorias = XLSX.utils.json_to_sheet(dadosCategorias);
+                XLSX.utils.book_append_sheet(wb, wsCategorias, "Resumo por Categoria");
+                
+                // Adicionar aba de transações
+                const wsTransacoes = XLSX.utils.json_to_sheet(dadosTransacoes);
+                XLSX.utils.book_append_sheet(wb, wsTransacoes, "Transações Detalhadas");
+                
+                // Gerar nome do arquivo com data/hora
+                const dataAtual = new Date();
+                const dataFormatada = dataAtual.toISOString().slice(0,10);
+                const nomeArquivo = `relatorio_financeiro_${dataFormatada}.xlsx`;
+                
+                // Exportar arquivo
+                XLSX.writeFile(wb, nomeArquivo);
+                
+                // Feedback de sucesso
+                mostrarFeedback('Relatório exportado com sucesso!', 'success');
+                
+            } catch (error) {
+                console.error('Erro ao exportar para Excel:', error);
+                mostrarFeedback('Erro ao exportar relatório. Tente novamente.', 'danger');
+            }
+        }
+
+        // Função para obter transações filtradas (reutiliza lógica do gerarRelatorio)
+        function obterTransacoesFiltradas() {
+            const dataInicio = document.getElementById('relatorio-data-inicio').value;
+            const dataFim = document.getElementById('relatorio-data-fim').value;
+            const tipo = document.getElementById('relatorio-tipo').value;
+            
+            let transacoesFiltradas = [...transacoes];
+
+            if (dataInicio) {
+                transacoesFiltradas = transacoesFiltradas.filter(t => t.data >= dataInicio);
+            }
+
+            if (dataFim) {
+                transacoesFiltradas = transacoesFiltradas.filter(t => t.data <= dataFim);
+            }
+
+            if (tipo) {
+                transacoesFiltradas = transacoesFiltradas.filter(t => t.tipo === tipo);
+            }
+
+            return transacoesFiltradas;
+        }
+
+        // Função para gerar dados da aba de categorias
+        function gerarDadosCategorias(transacoesFiltradas) {
+            // Agrupar por categoria
+            const categoriasAgrupadas = {};
+            transacoesFiltradas.forEach(t => {
+                if (!categoriasAgrupadas[t.categoria_id]) {
+                    categoriasAgrupadas[t.categoria_id] = {
+                        Categoria: t.categoria_nome,
+                        Tipo: t.categoria_tipo === 'income' ? 'Receita' : 'Despesa',
+                        Total: 0,
+                        Transacoes: 0,
+                        Media: 0,
+                        Porcentagem: 0
+                    };
+                }
+                categoriasAgrupadas[t.categoria_id].Total += parseFloat(t.valor);
+                categoriasAgrupadas[t.categoria_id].Transacoes++;
+            });
+
+            // Calcular médias e porcentagens
+            const totalGeral = transacoesFiltradas.reduce((sum, t) => sum + parseFloat(t.valor), 0);
+            const resultado = Object.values(categoriasAgrupadas).map(c => {
+                const media = c.Total / c.Transacoes;
+                const porcentagem = totalGeral !== 0 ? (Math.abs(c.Total) / Math.abs(totalGeral)) * 100 : 0;
+                
+                return {
+                    Categoria: c.Categoria,
+                    Tipo: c.Tipo,
+                    Total: c.Total,
+                    Transacoes: c.Transacoes,
+                    Media: media,
+                    Porcentagem: porcentagem
+                };
+            });
+
+            // Ordenar por total (decrescente)
+            return resultado.sort((a, b) => b.Total - a.Total);
+        }
+
+        // Função para gerar dados da aba de transações
+        function gerarDadosTransacoes(transacoesFiltradas) {
+            return transacoesFiltradas.map(t => ({
+                Data: t.data,
+                Categoria: t.categoria_nome,
+                Tipo: t.categoria_tipo === 'income' ? 'Receita' : 'Despesa',
+                Valor: parseFloat(t.valor),
+                Descricao: t.descricao || '',
+                ID: t.id
+            }));
+        }
+
+        // Eventos
+        document.getElementById('btn-gerar-relatorio').addEventListener('click', gerarRelatorio);
+        document.getElementById('btn-exportar-excel').addEventListener('click', exportarParaExcel);
+
+        // Inicializar quando a página carregar
+        document.addEventListener('DOMContentLoaded', initRelatorios);
+    </script>
+</body>
+</html>

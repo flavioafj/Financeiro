@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Controle Financeiro</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    
+    <!-- Estilos personalizados -->
+    <link href="../css/style.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <i class="bi bi-currency-dollar me-2"></i>
+                Controle Financeiro
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="transacoes.html">
+                            <i class="bi bi-list-ul me-1"></i>
+                            Transações
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="categorias.html">
+                            <i class="bi bi-tags me-1"></i>
+                            Categorias
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="relatorios.html">
+                            <i class="bi bi-bar-chart me-1"></i>
+                            Relatórios
+                        </a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-person-circle me-1"></i>
+                            <span id="user-name">Carregando...</span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#" id="logout-btn">
+                                <i class="bi bi-box-arrow-right me-2"></i>
+                                Sair
+                            </a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container mt-5-custom">
+        <div class="row mb-4">
+            <div class="col-12">
+                <h1 class="h2 mb-3">Dashboard Financeiro</h1>
+                <p class="text-muted">Visão geral das suas finanças</p>
+            </div>
+        </div>
+
+        <!-- Cards de Resumo -->
+        <div class="row mb-4">
+            <div class="col-md-4">
+                <div class="card dashboard-card">
+                    <div class="card-body">
+                        <i class="bi bi-arrow-up-circle text-success icon-large"></i>
+                        <div class="dashboard-value text-success" id="total-receitas">R$ 0,00</div>
+                        <div class="dashboard-label">Total de Receitas</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card dashboard-card">
+                    <div class="card-body">
+                        <i class="bi bi-arrow-down-circle text-danger icon-large"></i>
+                        <div class="dashboard-value text-danger" id="total-despesas">R$ 0,00</div>
+                        <div class="dashboard-label">Total de Despesas</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card dashboard-card">
+                    <div class="card-body">
+                        <i class="bi bi-wallet2 icon-large"></i>
+                        <div class="dashboard-value saldo-zero" id="saldo-atual">R$ 0,00</div>
+                        <div class="dashboard-label">Saldo Atual</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Estatísticas -->
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <i class="bi bi-clipboard-data me-2"></i>
+                        Estatísticas
+                    </div>
+                    <div class="card-body">
+                        <div class="row text-center">
+                            <div class="col-6">
+                                <h5 class="text-primary" id="total-transacoes">0</h5>
+                                <small class="text-muted">Transações</small>
+                            </div>
+                            <div class="col-6">
+                                <h5 class="text-info">0</h5>
+                                <small class="text-muted">Categorias</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <i class="bi bi-plus-circle me-2"></i>
+                        Ações Rápidas
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-6 mb-2">
+                                <a href="transacoes.html" class="btn btn-primary w-100">
+                                    <i class="bi bi-plus me-2"></i>
+                                    Nova Transação
+                                </a>
+                            </div>
+                            <div class="col-6 mb-2">
+                                <a href="categorias.html" class="btn btn-outline-primary w-100">
+                                    <i class="bi bi-tags me-2"></i>
+                                    Gerenciar Categorias
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Gráfico de Categorias -->
+        <div class="row">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header">
+                        <i class="bi bi-pie-chart me-2"></i>
+                        Distribuição por Categoria
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-container">
+                            <canvas id="categoriaChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header">
+                        <i class="bi bi-clock-history me-2"></i>
+                        Últimas Transações
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-sm">
+                                <thead>
+                                    <tr>
+                                        <th>Data</th>
+                                        <th>Tipo</th>
+                                        <th>Valor</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="ultimas-transacoes">
+                                    <!-- Dados carregados via JavaScript -->
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="text-center mt-2">
+                            <a href="transacoes.html" class="btn btn-sm btn-outline-primary">
+                                Ver todas
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer mt-5-custom">
+        <div class="container text-center">
+            <p class="mb-0">© 2024 Controle Financeiro - Todos os direitos reservados</p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- JavaScript personalizado -->
+    <script src="../js/app.js"></script>
+    
+    <script>
+        // Função para carregar últimas transações
+        async function loadUltimasTransacoes(user_id) {
+            try {
+                const transacoes = await getTransacoes(user_id, 5, 0);
+                const tbody = document.getElementById('ultimas-transacoes');
+                
+                if (!tbody) return;
+                
+                tbody.innerHTML = '';
+                
+                if (transacoes.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="3" class="text-center text-muted">Nenhuma transação encontrada</td></tr>';
+                    return;
+                }
+                
+                transacoes.forEach(transacao => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${transacao.data ? formatDate(transacao.data) : 'N/A'}</td>
+                        <td>
+                            <span class="badge ${transacao.tipo === 'income' ? 'badge-income' : 'badge-expense'}">
+                                ${transacao.tipo === 'income' ? 'Receita' : 'Despesa'}
+                            </span>
+                        </td>
+                        <td class="${transacao.tipo === 'income' ? 'text-income' : 'text-expense'}">
+                            ${formatCurrency(transacao.valor)}
+                        </td>
+                    `;
+                    tbody.appendChild(row);
+                });
+            } catch (error) {
+                console.error('Erro ao carregar últimas transações:', error);
+            }
+        }
+
+        // Função para carregar categorias e atualizar estatísticas
+        async function loadEstatisticas(user_id) {
+            try {
+                const categorias = await getCategorias(user_id);
+                const totalCategorias = categorias.length;
+                
+                // Atualizar total de categorias no card
+                const estatisticasCard = document.querySelector('.card-body .row .col-6:nth-child(2) h5');
+                if (estatisticasCard) {
+                    estatisticasCard.textContent = totalCategorias;
+                }
+            } catch (error) {
+                console.error('Erro ao carregar estatísticas:', error);
+            }
+        }
+
+        // Função para inicializar o dashboard
+        async function initDashboard() {
+            const user = getUser();
+            if (!user) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            // Atualizar nome do usuário no navbar
+            const userNameElement = document.getElementById('user-name');
+            if (userNameElement) {
+                userNameElement.textContent = user.nome;
+            }
+
+            // Carregar dados do dashboard
+            await updateDashboard(user.id);
+            await generateChart(user.id);
+            await loadUltimasTransacoes(user.id);
+            await loadEstatisticas(user.id);
+        }
+
+        // Evento de logout
+        document.getElementById('logout-btn').addEventListener('click', function(e) {
+            e.preventDefault();
+            if (confirm('Deseja realmente sair?')) {
+                clearUser();
+                window.location.href = 'login.html';
+            }
+        });
+
+        // Inicializar dashboard quando a página carregar
+        document.addEventListener('DOMContentLoaded', initDashboard);
+    </script>
+</body>
+</html>

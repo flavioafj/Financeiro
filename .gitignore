@@ -1,0 +1,121 @@
+# Arquivos de ambiente
+.env
+.env.local
+.env.production
+.env.development
+
+# Arquivos de logs
+*.log
+logs/
+error_log
+access_log
+
+# Arquivos de cache
+cache/
+*.cache
+*.tmp
+
+# Arquivos de sistema
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# Arquivos de IDE
+.vscode/
+.idea/
+*.sublime-*
+*.atom/
+
+# Arquivos de backup
+*.bak
+*.backup
+*.old
+*.orig
+
+# Arquivos de teste temporários
+testar_*.php
+testar_*.html
+testar_*.js
+
+# Arquivos de configuração local
+config.local.php
+database.local.php
+
+# Arquivos de upload (se houver)
+uploads/
+temp/
+tmp/
+
+# Arquivos de dependências (caso use Composer no futuro)
+vendor/
+node_modules/
+
+# Arquivos de build (caso use no futuro)
+dist/
+build/
+
+# Arquivos de banco de dados locais
+*.sqlite
+*.db
+
+# Arquivos de sessão
+sessions/
+session_*
+
+# Arquivos de debug
+debug.log
+xdebug.log
+
+# Arquivos de performance
+*.prof
+*.trace
+
+# Arquivos de documentação temporária
+docs/temp/
+docs/temporal/
+
+# Arquivos de exemplo
+*.example
+*.sample
+*.template
+
+# Arquivos de configuração de servidores locais
+apache.conf
+nginx.conf
+.htaccess.local
+.htaccess.dev
+
+# Arquivos de métricas e cobertura
+coverage/
+*.coverage
+.nyc_output/
+
+# Arquivos de CI/CD (caso adicione no futuro)
+.github/
+.gitlab-ci.yml
+.travis.yml
+.circleci/
+
+# Arquivos de deploy
+deploy/
+deploy.sh
+deploy.php
+
+# Arquivos de documentação de API (gerados)
+api-docs/
+swagger.json
+openapi.yaml
+
+# Arquivos de monitoramento
+monitoring/
+health-check.php
+
+# Arquivos de testes de carga
+load-test/
+stress-test/
+
+# Arquivos de exportação temporária
+export/
+import/
