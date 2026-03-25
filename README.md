@@ -148,6 +148,300 @@ php testes/test_security.php
 node testes/test_frontend.js
 ```
 
+## 📡 API Endpoints
+
+### Autenticação
+
+#### Registro de Usuário
+```http
+POST /api/routes/index.php/auth/register
+Content-Type: application/json
+
+{
+    "email": "usuario@exemplo.com",
+    "senha": "senha123",
+    "nome": "Nome do Usuário"
+}
+```
+
+**Resposta de sucesso:**
+```json
+{
+    "status": "success",
+    "message": "Usuário registrado com sucesso",
+    "data": {
+        "id": 1,
+        "email": "usuario@exemplo.com",
+        "nome": "Nome do Usuário"
+    }
+}
+```
+
+#### Login de Usuário
+```http
+POST /api/routes/index.php/auth/login
+Content-Type: application/json
+
+{
+    "email": "usuario@exemplo.com",
+    "senha": "senha123"
+}
+```
+
+**Resposta de sucesso:**
+```json
+{
+    "status": "success",
+    "message": "Login realizado com sucesso",
+    "data": {
+        "id": 1,
+        "email": "usuario@exemplo.com",
+        "nome": "Nome do Usuário",
+        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9..."
+    }
+}
+```
+
+### Categorias
+
+#### Listar Categorias
+```http
+GET /api/routes/index.php/categories?user_id=1
+Authorization: Bearer seu_token_jwt
+```
+
+**Resposta:**
+```json
+{
+    "status": "success",
+    "data": [
+        {
+            "id": 1,
+            "nome": "Alimentação",
+            "tipo": "expense",
+            "user_id": 1
+        },
+        {
+            "id": 2,
+            "nome": "Salário",
+            "tipo": "income",
+            "user_id": 1
+        }
+    ]
+}
+```
+
+### Transações
+
+#### Registrar Transação
+```http
+POST /api/routes/index.php/transactions?user_id=1
+Authorization: Bearer seu_token_jwt
+Content-Type: application/json
+
+{
+    "categoria_id": 1,
+    "valor": 50.00,
+    "tipo": "expense",
+    "data": "2024-01-15",
+    "descricao": "Almoço no restaurante"
+}
+```
+
+**Resposta de sucesso:**
+```json
+{
+    "status": "success",
+    "message": "Transação registrada com sucesso",
+    "data": {
+        "id": 123,
+        "categoria_id": 1,
+        "valor": 50.00,
+        "tipo": "expense",
+        "data": "2024-01-15",
+        "descricao": "Almoço no restaurante",
+        "user_id": 1
+    }
+}
+```
+
+#### Listar Transações
+```http
+GET /api/routes/index.php/transactions?user_id=1&limit=10&offset=0
+Authorization: Bearer seu_token_jwt
+```
+
+**Resposta:**
+```json
+{
+    "status": "success",
+    "data": [
+        {
+            "id": 123,
+            "categoria_id": 1,
+            "categoria_nome": "Alimentação",
+            "categoria_tipo": "expense",
+            "valor": 50.00,
+            "tipo": "expense",
+            "data": "2024-01-15",
+            "descricao": "Almoço no restaurante",
+            "user_id": 1
+        }
+    ]
+}
+```
+
+#### Atualizar Transação
+```http
+PUT /api/routes/index.php/transactions/123?user_id=1
+Authorization: Bearer seu_token_jwt
+Content-Type: application/json
+
+{
+    "categoria_id": 2,
+    "valor": 75.00,
+    "tipo": "expense",
+    "data": "2024-01-15",
+    "descricao": "Jantar no restaurante"
+}
+```
+
+**Resposta de sucesso:**
+```json
+{
+    "status": "success",
+    "message": "Transação atualizada com sucesso"
+}
+```
+
+#### Excluir Transação
+```http
+DELETE /api/routes/index.php/transactions/123?user_id=1
+Authorization: Bearer seu_token_jwt
+```
+
+**Resposta de sucesso:**
+```json
+{
+    "status": "success",
+    "message": "Transação excluída com sucesso"
+}
+```
+
+### Exemplos de Uso com cURL
+
+#### Registro de Usuário
+```bash
+curl -X POST http://localhost/Financas/api/routes/index.php/auth/register \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "usuario@exemplo.com",
+    "senha": "senha123",
+    "nome": "Nome do Usuário"
+  }'
+```
+
+#### Login
+```bash
+curl -X POST http://localhost/Financas/api/routes/index.php/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "usuario@exemplo.com",
+    "senha": "senha123"
+  }'
+```
+
+#### Registro de Transação (após login)
+```bash
+curl -X POST http://localhost/Financas/api/routes/index.php/transactions?user_id=1 \
+  -H "Authorization: Bearer seu_token_jwt" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "categoria_id": 1,
+    "valor": 100.00,
+    "tipo": "income",
+    "data": "2024-01-15",
+    "descricao": "Salário"
+  }'
+```
+
+#### Listar Transações
+```bash
+curl -X GET http://localhost/Financas/api/routes/index.php/transactions?user_id=1 \
+  -H "Authorization: Bearer seu_token_jwt"
+```
+
+## 🔧 Como Testar a API
+
+### 1. Teste de Registro e Login
+```bash
+# 1. Registre um novo usuário
+curl -X POST http://localhost/Financas/api/routes/index.php/auth/register \
+  -H "Content-Type: application/json" \
+  -d '{"email": "test@test.com", "senha": "123456", "nome": "Teste"}'
+
+# 2. Faça login para obter o token
+curl -X POST http://localhost/Financas/api/routes/index.php/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"email": "test@test.com", "senha": "123456"}'
+
+# 3. Use o token retornado para registrar transações
+```
+
+### 2. Teste de Transações
+```bash
+# 1. Registre categorias primeiro (ou use categorias existentes)
+# 2. Registre transações usando o token obtido no login
+# 3. Consulte as transações registradas
+```
+
+### 3. Teste de Segurança
+- **Tokens JWT**: Sempre inclua o token nas requisições que exigem autenticação
+- **Validação de entrada**: A API valida todos os campos enviados
+- **Proteção CSRF**: Implementada nas operações críticas
+
+### 4. Ferramentas de Teste
+- **Postman**: Importe a coleção de endpoints
+- **Insomnia**: Alternativa ao Postman
+- **cURL**: Para testes rápidos via linha de comando
+- **JavaScript Fetch**: Para testes no frontend
+
+## 📊 Estrutura de Dados
+
+### Usuário
+```json
+{
+    "id": 1,
+    "email": "usuario@exemplo.com",
+    "nome": "Nome do Usuário",
+    "senha": "senha_criptografada",
+    "created_at": "2024-01-01 00:00:00"
+}
+```
+
+### Categoria
+```json
+{
+    "id": 1,
+    "nome": "Alimentação",
+    "tipo": "expense",
+    "user_id": 1
+}
+```
+
+### Transação
+```json
+{
+    "id": 123,
+    "categoria_id": 1,
+    "valor": 50.00,
+    "tipo": "expense",
+    "data": "2024-01-15",
+    "descricao": "Almoço no restaurante",
+    "user_id": 1
+}
+```
+
 ## 🔒 Segurança
 
 ### Medidas implementadas
