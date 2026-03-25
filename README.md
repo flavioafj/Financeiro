@@ -235,17 +235,8 @@ Authorization: Bearer seu_token_jwt
 
 #### Registrar Transação
 ```http
-POST /api/routes/index.php/transactions?user_id=1
+GET /api/routes/index.php/transactions?user_id=1&categoria_id=1&valor=50.00&tipo=expense&data=2024-01-15&descricao=Almo%C3%A7o+no+restaurante
 Authorization: Bearer seu_token_jwt
-Content-Type: application/json
-
-{
-    "categoria_id": 1,
-    "valor": 50.00,
-    "tipo": "expense",
-    "data": "2024-01-15",
-    "descricao": "Almoço no restaurante"
-}
 ```
 
 **Resposta de sucesso:**
@@ -353,16 +344,8 @@ curl -X POST http://localhost/Financas/api/routes/index.php/auth/login \
 
 #### Registro de Transação (após login)
 ```bash
-curl -X POST http://localhost/Financas/api/routes/index.php/transactions?user_id=1 \
-  -H "Authorization: Bearer seu_token_jwt" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "categoria_id": 1,
-    "valor": 100.00,
-    "tipo": "income",
-    "data": "2024-01-15",
-    "descricao": "Salário"
-  }'
+curl -X GET "http://localhost/Financas/api/routes/index.php/transactions?user_id=1&categoria_id=1&valor=100.00&tipo=income&data=2024-01-15&descricao=Sal%C3%A1rio" \
+  -H "Authorization: Bearer seu_token_jwt"
 ```
 
 #### Listar Transações
